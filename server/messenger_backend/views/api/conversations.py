@@ -21,6 +21,8 @@ class Conversations(APIView):
                 return HttpResponse(status=401)
             user_id = user.id
 
+           
+
             conversations = (
                 Conversation.objects.filter(Q(user1=user_id) | Q(user2=user_id))
                 .prefetch_related(
@@ -30,6 +32,7 @@ class Conversations(APIView):
                 )
                 .all()
             )
+            
 
             conversations_response = []
 
@@ -37,13 +40,14 @@ class Conversations(APIView):
                 convo_dict = {
                     "id": convo.id,
                     "messages": [
-                        message.to_dict(["id", "text", "senderId", "createdAt"])
+                        message.to_dict(["id", "text", "senderId", "seen", "createdAt" ])
                         for message in convo.messages.all()
                     ],
                 }
 
                 # set properties for notification count and latest message preview
                 convo_dict["latestMessageText"] = convo_dict["messages"][0]["text"]
+                
 
                 # set a property "otherUser" so that frontend will have easier access
                 user_fields = ["id", "username", "photoUrl"]
@@ -58,6 +62,7 @@ class Conversations(APIView):
                 else:
                     convo_dict["otherUser"]["online"] = False
 
+
                 conversations_response.append(convo_dict)
             conversations_response.sort(
                 key=lambda convo: convo["messages"][0]["createdAt"],
@@ -69,3 +74,7 @@ class Conversations(APIView):
             )
         except Exception as e:
             return HttpResponse(status=500)
+    
+    def put(self, request: Request, conversationId: str):
+        print("conversation api")
+

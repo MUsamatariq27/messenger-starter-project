@@ -45,6 +45,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.TextField()),
                 ('senderId', models.IntegerField()),
+                ('seen', models.DateTimeField(null=True, auto_now_add=True)),
                 ('createdAt', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('updatedAt', models.DateTimeField(auto_now=True)),
                 ('conversation', models.ForeignKey(db_column='conversationId', on_delete=django.db.models.deletion.CASCADE, related_name='messages', related_query_name='message', to='messenger_backend.conversation')),
