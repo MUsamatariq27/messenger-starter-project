@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import BooleanField
 #from django.db.models.fields import BooleanField
 
 from . import utils

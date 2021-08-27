@@ -4,12 +4,9 @@ from rest_framework.views import APIView
 from django.contrib.auth.middleware import get_user
 import datetime, pytz
 
-
-
-
-class Messageseen(APIView):
+class  MessagesSeen(APIView):
     
-    def put(self, request, conversationId: str):
+    def put(self, request, conversationId: str, otherUserId: str):
     
         try:
             user = get_user(request)
@@ -20,22 +17,24 @@ class Messageseen(APIView):
             if (conversationId is None):
                 return HttpResponse(status=400)
 
-            conversation = Conversation.objects.filter(id=conversationId).first()
+            convoCheck = Conversation.find_conversation(user.id, otherUserId)
 
-            lastIndex = len(conversation.messages.all()) - 1
-            latestMessage = conversation.messages.all()[lastIndex]
+            if ( (convoCheck is None) or (convoCheck.id != int(conversationId))):
+                return HttpResponse(status=404)
 
+            conversationMessages = Conversation.objects.filter(id=conversationId).first().messages.all()
+
+            lastIndex = len(conversationMessages) - 1
+            latestMessage = conversationMessages[lastIndex]
             if (latestMessage.senderId == user.id):
                 return HttpResponse(status=204)
             
-            for message in conversation.messages.all():
-                
-                if (message.seen is None):
-                    message.seen = datetime.datetime.now(tz=pytz.timezone("US/Eastern"))
-                    message.save()
+            dateTime=datetime.datetime.now(tz=pytz.timezone("US/Eastern"))
+            conversationMessages.filter(seen=None).update(seen=dateTime)
+
+        
             
             return JsonResponse({"success" : True})
             
         except Exception as e:
             return HttpResponse(status=500)
-    

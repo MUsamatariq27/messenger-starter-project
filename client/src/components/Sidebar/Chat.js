@@ -36,7 +36,7 @@ const Chat = (props) => {
     await props.setActiveChat(conversation.otherUser.username)
 
     if (messages?.length && !messages[messages.length - 1].seen) {
-      await props.updateSeen(conversation.id);
+      await props.updateSeen(conversation.id, otherUser.id);
     }
   };
 
@@ -63,8 +63,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setActiveChat(id));
     },
 
-    updateSeen: (conversationId) => {
-      dispatch(readMsgUpdate(conversationId));
+    updateSeen: (conversationId, otherUserId) => {
+      dispatch(readMsgUpdate(conversationId, otherUserId));
     }
 
   };

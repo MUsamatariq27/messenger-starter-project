@@ -118,9 +118,9 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
   }
 };
 
-export const readMsgUpdate = (conversationId) => async (dispatch) => {
+export const readMsgUpdate = (conversationId, otherUserId) => async (dispatch) => {
   try {
-    await axios.put(`/api/messages/${conversationId}`);
+    await axios.put(`/api/messages/${conversationId}/${otherUserId}`);
     dispatch(msgRead(conversationId));
   } catch (error) {
     console.error('error');

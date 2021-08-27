@@ -24,7 +24,7 @@ const ChatContent = (props) => {
   const classes = useStyles();
 
   const { conversation } = props;
-  const { latestMessageText, otherUser } = conversation;
+  const { latestMessageText, otherUser, messages } = conversation;
 
   return (
     <Box className={classes.root}>
@@ -32,8 +32,11 @@ const ChatContent = (props) => {
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography className={classes.previewText}>
-          {latestMessageText}
+        <Typography className={classes.previewText} > 
+          <span  style={ messages.filter((msg) => !msg.seen && msg.senderId === otherUser.id)?.length
+            ? { fontWeight: 'bold' } : { fontWeight: 'normal' } }>
+            {latestMessageText}
+          </span> 
         </Typography>
       </Box>
     </Box>

@@ -74,7 +74,4 @@ class Conversations(APIView):
             )
         except Exception as e:
             return HttpResponse(status=500)
-    
-    def put(self, request: Request, conversationId: str):
-        print("conversation api")
 
