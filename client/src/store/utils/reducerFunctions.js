@@ -80,3 +80,22 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
+
+export const convoRead = (state, conversationId) => {
+  return state.map((convo) => {
+    
+    if (convo.id === conversationId) {
+      const convoNew = { ...convo };
+      const messages = convoNew.messages.map((msg) => {
+        msg.seen = new Date().getDate();
+        return msg;
+      });
+      convoNew.messages = messages;
+      return convoNew;
+    } else {
+      return convo;
+    }
+  });
+};
+
+
