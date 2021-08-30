@@ -2,9 +2,11 @@ import base64
 import hashlib
 import os
 
+
 from django.db import models
 
 from . import utils
+from .conversation import Conversation
 
 
 class User(utils.CustomModel):
@@ -13,8 +15,10 @@ class User(utils.CustomModel):
     photoUrl = models.TextField()
     password = models.TextField(null=False)
     salt = models.TextField()
+    converesations = models.ManyToManyField(Conversation)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    
 
     @property
     def is_anonymous(self):
